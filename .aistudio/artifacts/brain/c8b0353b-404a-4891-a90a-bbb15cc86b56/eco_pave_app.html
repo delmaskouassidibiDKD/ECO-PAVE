@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="fr" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Éco Pavé - Valorisation des Déchets Plastiques</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    .screen-view { display: none; }
+    .screen-view.active { display: flex; }
+    .tab-btn.active { color: #34d399; font-weight: bold; }
+    .tab-btn.active i { transform: scale(1.1); }
+  </style>
+</head>
+<body class="bg-[#0c1322] text-slate-100 min-h-screen flex flex-col font-sans select-none overflow-x-hidden">
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed top-4 left-1/2 -translate-x-1/2 z-[999] bg-emerald-500 text-slate-950 px-4 py-2.5 rounded-2xl shadow-2xl font-bold text-xs items-center space-x-2 border border-emerald-300 hidden whitespace-nowrap">
+    <i class="fa-solid fa-circle-check text-sm"></i>
+    <span id="toastText">Action validée !</span>
+  </div>
+
+  <!-- MAIN CONTAINER (SANS CADRE DE TÉLÉPHONE) -->
+  <main class="w-full max-w-xl mx-auto flex-1 flex flex-col relative min-h-screen bg-[#0c1322]">
+    
+    <!-- ==============================================
+         1. ACCUEIL / DASHBOARD (screen-home)
+         ============================================== -->
+    <div id="screen-home" class="screen-view active flex-col w-full min-h-screen p-4 space-y-4 pb-28 pt-2">
+      <!-- Profil Header -->
+      <div class="flex items-center justify-between pt-1">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="navigateTo('screen-settings')">
+          <div class="w-12 h-12 rounded-full overflow-hidden border-2 border-emerald-500 shadow-md">
+            <img alt="Avatar" class="w-full h-full object-cover" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" />
+          </div>
+          <div>
+            <div class="flex items-center space-x-1 text-xs text-emerald-400">
+              <i class="fa-solid fa-location-dot"></i>
+              <span class="text-slate-300">Abidjan, Cocody</span>
+            </div>
+            <h2 class="text-base font-bold text-white flex items-center space-x-1">
+              <span>Bonjour, <span id="homeUserName">Alex</span></span> 👋
+            </h2>
+          </div>
+        </div>
+        <button class="w-10 h-10 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300 hover:text-emerald-400 relative cursor-pointer" onclick="navigateTo('screen-chat')">
+          <i class="fa-regular fa-bell"></i>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full animate-ping"></span>
+          <span class="absolute top-2 right-2 w-2 h-2 bg-emerald-500 rounded-full"></span>
+        </button>
+      </div>
+
+      <!-- Grande Carte Impact Vert -->
+      <div class="bg-gradient-to-br from-emerald-600 to-teal-800 rounded-3xl p-5 text-white shadow-xl relative overflow-hidden">
+        <div class="absolute -right-6 -bottom-6 opacity-15 text-9xl text-white pointer-events-none select-none">
+          <i class="fa-solid fa-recycle"></i>
+        </div>
+        <div class="flex justify-between items-center mb-3 relative z-10">
+          <span class="bg-white/20 backdrop-blur-md px-3 py-1 rounded-full text-xs font-semibold flex items-center space-x-1">
+            <i class="fa-solid fa-leaf text-emerald-200"></i>
+            <span>IMPACT ÉCOLOGIQUE</span>
+          </span>
+          <span class="text-xs bg-emerald-900/60 border border-emerald-500/30 px-2 py-0.5 rounded-full text-emerald-200 font-medium">+15 pts ajd</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 my-2 relative z-10">
+          <div>
+            <span id="statKg" class="text-3xl font-extrabold tracking-tight">34.5</span>
+            <span class="text-xs text-emerald-100 block">kg recyclés</span>
+          </div>
+          <div class="text-right">
+            <span id="statPoints" class="text-3xl font-extrabold tracking-tight text-white">180</span>
+            <span class="text-xs text-emerald-100 block">Points gagnés</span>
+          </div>
+        </div>
+        <div class="mt-3 relative z-10">
+          <div class="flex justify-between text-[11px] mb-1 font-medium text-emerald-100">
+            <span>Niveau Argent (Éco-Citoyen)</span>
+            <span id="rankProgressLabel">75% vers Or</span>
+          </div>
+          <div class="w-full bg-emerald-950/60 h-2 rounded-full overflow-hidden">
+            <div id="rankProgressBar" class="bg-yellow-400 h-full rounded-full w-3/4 transition-all duration-500"></div>
+          </div>
+        </div>
+        <button class="w-full mt-4 bg-white text-emerald-800 hover:bg-emerald-50 font-bold py-2.5 px-4 rounded-2xl flex items-center justify-center space-x-2 shadow-lg transition-transform active:scale-95 cursor-pointer" onclick="navigateTo('screen-report')">
+          <i class="fa-solid fa-qrcode text-emerald-600"></i>
+          <span>Scanner ou Signaler un déchet</span>
+          <i class="fa-solid fa-arrow-right text-xs"></i>
+        </button>
+      </div>
+
+      <!-- 4 Actions Rapides -->
+      <div class="grid grid-cols-4 gap-2 pt-1">
+        <button onclick="navigateTo('screen-report')" class="flex flex-col items-center p-2 rounded-2xl bg-slate-900 border border-slate-800 hover:border-emerald-500/50 hover:bg-slate-800/80 cursor-pointer transition-all active:scale-95 text-left">
+          <div class="w-11 h-11 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-400 text-lg mb-1">
+            <i class="fa-solid fa-camera"></i>
+          </div>
+          <span class="text-[11px] font-medium text-slate-300">Scanner</span>
+        </button>
+        <button onclick="navigateTo('screen-map')" class="flex flex-col items-center p-2 rounded-2xl bg-slate-900 border border-slate-800 hover:border-teal-500/50 hover:bg-slate-800/80 cursor-pointer transition-all active:scale-95 text-left">
+          <div class="w-11 h-11 rounded-xl bg-teal-500/10 flex items-center justify-center text-teal-400 text-lg mb-1">
+            <i class="fa-solid fa-trash-can"></i>
+          </div>
+          <span class="text-[11px] font-medium text-slate-300">Déposer</span>
+        </button>
+        <button onclick="navigateTo('screen-waste-detail')" class="flex flex-col items-center p-2 rounded-2xl bg-slate-900 border border-slate-800 hover:border-cyan-500/50 hover:bg-slate-800/80 cursor-pointer transition-all active:scale-95 text-left">
+          <div class="w-11 h-11 rounded-xl bg-cyan-500/10 flex items-center justify-center text-cyan-400 text-lg mb-1">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+          </div>
+          <span class="text-[11px] font-medium text-slate-300">Historique</span>
+        </button>
+        <button onclick="navigateTo('screen-market')" class="flex flex-col items-center p-2 rounded-2xl bg-slate-900 border border-slate-800 hover:border-amber-500/50 hover:bg-slate-800/80 cursor-pointer transition-all active:scale-95 text-left">
+          <div class="w-11 h-11 rounded-xl bg-amber-500/10 flex items-center justify-center text-amber-400 text-lg mb-1">
+            <i class="fa-solid fa-gift"></i>
+          </div>
+          <span class="text-[11px] font-medium text-slate-300">Cadeaux</span>
+        </button>
+      </div>
+
+      <!-- Borne la plus proche -->
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-sm font-bold text-white">Borne la plus proche</h3>
+          <span class="text-xs text-emerald-400 font-semibold cursor-pointer hover:underline" onclick="navigateTo('screen-map')">
+            350 m <i class="fa-solid fa-location-arrow ml-0.5 text-[10px]"></i>
+          </span>
+        </div>
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex items-center space-x-3 cursor-pointer hover:border-emerald-500/50 hover:bg-slate-800/70 transition-all active:scale-[0.99]" onclick="navigateTo('screen-map')">
+          <img alt="Borne" class="w-16 h-16 rounded-xl object-cover shrink-0 border border-slate-800" src="https://lh3.googleusercontent.com/aida/AEtjO1VVtwfIMU7hSK4E6vB7JLuxLqTD6XVvqdh_yUnzmfxVDVJz93c0MIcfeWPoe3tbp4Emuun0wATDULlKuJGiF-6Uc9nQusyPtOIzLP4_i7TVdcPGjQm6IsAQtEeidEE7XNf93TLO_shP6eSRJs2CeDvTAsNfl91-1IW1mMGnOCMv_jkI7wIARe0QPTKkVzOGKotXkn2CREQ0LcAPKgUjCmlbv6-Q_q5eYHA9MTlm9LLIjjLgZk-HQ_IG3Q" />
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs font-bold text-white truncate">Borne RVM - Plateau Cocody</span>
+              <span class="text-[10px] bg-emerald-500/20 text-emerald-400 px-1.5 py-0.5 rounded font-medium shrink-0">Ouvert</span>
+            </div>
+            <p class="text-[11px] text-slate-400 truncate mt-0.5">Accepte : Bouteilles PET, Bouchons</p>
+            <div class="flex items-center space-x-3 text-[10px] text-slate-400 mt-1">
+              <span><i class="fa-regular fa-clock mr-1 text-slate-500"></i>Jusqu'à 21h00</span>
+              <span><i class="fa-solid fa-person-walking mr-1 text-emerald-400"></i>4 min à pied</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Déchets valorisés du jour -->
+      <div>
+        <div class="flex justify-between items-center mb-2">
+          <h3 class="text-sm font-bold text-white">Déchets valorisés du jour</h3>
+          <span class="text-xs text-emerald-400 font-medium cursor-pointer hover:underline" onclick="navigateTo('screen-waste-detail')">Voir barème</span>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-emerald-500/50 hover:bg-slate-800/70 transition-all active:scale-[0.98] group" onclick="navigateTo('screen-waste-detail')">
+            <div class="relative rounded-xl overflow-hidden mb-2 h-24 bg-slate-950">
+              <img alt="Bouteille PET" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1UgCUP_6lec3y9WIxVecQF91I5m6n75KHvI4qzwTyK-eaxIQV2YlxIALpUNL9IrZGYPulNPKcoj4gCnMaoT4U8qwkUsl9QB5xEB7WQ4D51ccfsjCTKV83cEttxVfpTBMiMqheYhVqHEgqTzcS2InvPCdn7o1B697cZiHP4jtXQp6eaDkKJX4n5j9dZy86xaDyL9oVxd-1sxq34Z6absMcu5HiWluc2T0mCWVMpNYhXFmtv-bqBPxOAgoX0" />
+              <span class="absolute top-1.5 right-1.5 bg-black/70 backdrop-blur-sm text-yellow-400 text-[10px] font-bold px-1.5 py-0.5 rounded">★ 4.9</span>
+            </div>
+            <div class="text-xs font-bold text-white">Bouteilles PET</div>
+            <div class="flex justify-between items-center text-[11px] mt-1">
+              <span class="text-slate-400 text-[10px]">Transformé en Pavé</span>
+              <span class="text-emerald-400 font-bold">+25 pts</span>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-emerald-500/50 hover:bg-slate-800/70 transition-all active:scale-[0.98] group" onclick="navigateTo('screen-product-detail')">
+            <div class="relative rounded-xl overflow-hidden mb-2 h-24 bg-slate-950">
+              <img alt="Bocal Alimentaire" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" src="https://lh3.googleusercontent.com/aida/AEtjO1W99OiXWGaE6RIGXi11dX7BX7FFAL-JscO6K80nga1lahTR6lLdJ1iKL7biCCLwY7-bGTQLGx3M1IG6HoFxBPqBi9s0WvqjXwRm5KJWPUfAm3jt4WInGieu_J6vroQNOjbcW7F8Dr7Ovf-r6MnJIC7gwAjGa1PNlep-CuqRFJtE73S11IBxFnp6r04xRnNHYN-SSaL5rGVhY909Z9ME_OABpHv-T7Bx5zTzYRXN_wcx-nYcKpSAyUFFCTY" />
+              <span class="absolute top-1.5 right-1.5 bg-black/70 backdrop-blur-sm text-yellow-400 text-[10px] font-bold px-1.5 py-0.5 rounded">★ 4.8</span>
+            </div>
+            <div class="text-xs font-bold text-white">Bocal Alimentaire</div>
+            <div class="flex justify-between items-center text-[11px] mt-1">
+              <span class="text-slate-400 text-[10px]">Verre recyclé</span>
+              <span class="text-emerald-400 font-bold">+15 pts</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         2. CARTE DES BORNES (screen-map)
+         ============================================== -->
+    <div id="screen-map" class="screen-view flex-col w-full h-[calc(100vh-5rem)] relative select-none overflow-hidden">
+      <!-- Recherche Flottante -->
+      <div class="absolute top-3 left-4 right-4 z-20 space-y-2">
+        <div class="bg-slate-900/95 border border-slate-700/80 rounded-2xl px-3.5 py-2.5 flex items-center space-x-2.5 shadow-xl backdrop-blur-md">
+          <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+          <input class="bg-transparent text-xs text-white placeholder-slate-400 focus:outline-none w-full" placeholder="Rechercher une borne à Abidjan..." type="text" />
+          <button class="text-emerald-400 text-xs font-semibold"><i class="fa-solid fa-sliders"></i></button>
+        </div>
+        <div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar">
+          <span class="text-[10px] bg-slate-900/90 text-slate-300 border border-slate-700/70 px-2 py-0.5 rounded-full">Cocody</span>
+          <span class="text-[10px] bg-slate-900/90 text-slate-300 border border-slate-700/70 px-2 py-0.5 rounded-full">Plateau</span>
+          <span class="text-[10px] bg-slate-900/90 text-slate-300 border border-slate-700/70 px-2 py-0.5 rounded-full">Riviera</span>
+          <span class="text-[10px] bg-emerald-900/80 text-emerald-300 border border-emerald-600/50 px-2 py-0.5 rounded-full font-medium">4 Bornes actives</span>
+        </div>
+      </div>
+
+      <!-- Map Graphics -->
+      <div class="w-full h-full bg-[#0a1120] relative flex items-center justify-center overflow-hidden">
+        <svg class="absolute inset-0 w-full h-full opacity-40 pointer-events-none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M -20,240 Q 120,200 220,280 T 440,300 L 440,380 Q 280,360 160,420 T -20,380 Z" fill="#0f263d" opacity="0.6" />
+          <line stroke="#1e293b" stroke-width="12" x1="60" x2="360" y1="0" y2="720"></line>
+          <line stroke="#334155" stroke-width="4" x1="0" x2="420" y1="120" y2="400"></line>
+          <line stroke="#334155" stroke-width="3" x1="0" x2="420" y1="500" y2="280"></line>
+          <circle cx="200" cy="270" r="140" stroke="#047857" stroke-dasharray="4 4" fill="none" opacity="0.3"></circle>
+          <text x="175" y="195" fill="#475569" font-size="10" font-weight="bold">COCODY</text>
+          <text x="70" y="380" fill="#475569" font-size="10" font-weight="bold">PLATEAU</text>
+          <text x="270" y="150" fill="#475569" font-size="10" font-weight="bold">RIVIERA</text>
+        </svg>
+
+        <!-- Pin Cocody Actif -->
+        <div class="absolute top-[38%] left-[48%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer animate-bounce z-10" onclick="selectBorne('Cocody', '350 m', '4 min à pied')">
+          <div class="bg-slate-900 border border-emerald-500 text-[10px] text-white px-2 py-0.5 rounded-md shadow-xl font-bold mb-1 whitespace-nowrap">
+            Borne Cocody
+          </div>
+          <div class="w-10 h-10 rounded-full bg-emerald-500/30 flex items-center justify-center p-1">
+            <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs shadow-lg">
+              <i class="fa-solid fa-recycle"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pin Plateau -->
+        <div class="absolute top-[58%] left-[28%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer z-10" onclick="selectBorne('Plateau Commerce', '1.2 km', '15 min à pied')">
+          <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-emerald-400 flex items-center justify-center text-xs shadow-md">
+            <i class="fa-solid fa-recycle"></i>
+          </div>
+          <span class="text-[9px] text-slate-300 bg-slate-900/80 px-1 rounded mt-1">Plateau (1.2km)</span>
+        </div>
+
+        <!-- Pin Riviera -->
+        <div class="absolute top-[28%] left-[78%] -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer z-10" onclick="selectBorne('Riviera 3 Golf', '2.4 km', '7 min en voiture')">
+          <div class="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 text-emerald-400 flex items-center justify-center text-xs shadow-md">
+            <i class="fa-solid fa-recycle"></i>
+          </div>
+          <span class="text-[9px] text-slate-300 bg-slate-900/80 px-1 rounded mt-1">Riviera (2.4km)</span>
+        </div>
+      </div>
+
+      <!-- Bottom Sheet Information Borne -->
+      <div class="absolute bottom-4 left-3 right-3 bg-slate-900/95 border border-slate-800 rounded-3xl p-4 shadow-2xl backdrop-blur-md z-30">
+        <div class="w-10 h-1 bg-slate-700 rounded-full mx-auto mb-2.5"></div>
+        <div class="flex items-center space-x-3 mb-2">
+          <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-lg">
+            <i class="fa-solid fa-recycle"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <h4 id="sheetBorneName" class="text-sm font-bold text-white truncate">Borne Éco Pavé - Cocody Centre</h4>
+            <div class="flex items-center space-x-2 text-[10px] mt-0.5">
+              <span class="bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded font-medium">Bouteilles & Canettes</span>
+              <span class="bg-yellow-500/20 text-yellow-400 px-1.5 py-0.5 rounded font-medium">Gagner 25 pts/kg</span>
+            </div>
+          </div>
+        </div>
+        <p class="text-[11px] text-slate-400 line-clamp-2">Borne de collecte automatique Éco Pavé. Déposez vos plastiques triés et recevez instantanément vos éco-points.</p>
+        <div class="flex space-x-2 mt-3">
+          <button class="flex-1 bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-2.5 rounded-xl text-xs flex items-center justify-center space-x-1.5 transition-colors cursor-pointer" onclick="navigateTo('screen-report')">
+            <i class="fa-solid fa-camera"></i>
+            <span>Déposer ici</span>
+          </button>
+          <button class="px-3.5 bg-slate-800 text-slate-200 border border-slate-700 rounded-xl text-xs font-semibold cursor-pointer" onclick="navigateTo('screen-waste-detail')">
+            <i class="fa-solid fa-circle-info"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         3. SIGNALER UN DÉCHET (screen-report)
+         ============================================== -->
+    <div id="screen-report" class="screen-view flex-col w-full min-h-screen p-4 space-y-4 pb-28 pt-2">
+      <div class="flex items-center justify-between pt-1">
+        <button class="w-9 h-9 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer" onclick="navigateTo('screen-home')">
+          <i class="fa-solid fa-arrow-left text-xs"></i>
+        </button>
+        <h2 class="text-base font-bold text-white">Signaler un dépôt</h2>
+        <button class="w-9 h-9 rounded-full bg-slate-800 text-slate-300 hover:text-emerald-400 flex items-center justify-center cursor-pointer" onclick="navigateTo('screen-chat')">
+          <i class="fa-solid fa-circle-question text-xs"></i>
+        </button>
+      </div>
+
+      <div class="bg-gradient-to-r from-emerald-600 to-teal-700 rounded-2xl p-4 text-white shadow-lg flex justify-between items-center">
+        <div>
+          <span class="text-[10px] bg-white/20 backdrop-blur-md px-2 py-0.5 rounded-full font-bold">🇨🇮 Côte d'Ivoire Propre</span>
+          <h3 class="text-sm font-bold mt-1">Nettoyons nos communes</h3>
+          <p class="text-[11px] text-emerald-100 max-w-[210px] leading-snug mt-0.5">Photographiez les déchets plastiques pour guider nos équipes de ramassage.</p>
+        </div>
+        <div class="bg-white text-emerald-800 px-3 py-2 rounded-2xl text-center font-extrabold shadow-md shrink-0">
+          <span class="block text-base leading-none font-black">+50</span>
+          <span class="text-[9px] uppercase tracking-wider block font-bold text-emerald-900">Points</span>
+        </div>
+      </div>
+
+      <div id="photoBox" onclick="simulateUpload()" class="border-2 border-dashed border-emerald-500/50 bg-slate-900/60 rounded-3xl p-5 text-center flex flex-col items-center justify-center relative cursor-pointer hover:border-emerald-400 group transition-all">
+        <div class="w-16 h-16 rounded-full bg-emerald-500/10 text-emerald-400 group-hover:scale-105 transition-transform flex items-center justify-center text-2xl mb-2">
+          <i class="fa-solid fa-camera"></i>
+        </div>
+        <h4 id="photoBoxTitle" class="text-xs font-bold text-white">Toucher pour photographier</h4>
+        <p class="text-[10px] text-slate-400 mt-1">Ou importer un cliché depuis votre galerie</p>
+        <div class="flex space-x-2 mt-3">
+          <span class="text-[10px] bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-lg text-slate-300 flex items-center space-x-1">
+            <i class="fa-solid fa-barcode text-emerald-400"></i>
+            <span>Scanner code</span>
+          </span>
+          <span class="text-[10px] bg-slate-800 border border-slate-700 px-2.5 py-1 rounded-lg text-slate-300 flex items-center space-x-1">
+            <i class="fa-solid fa-wand-magic-sparkles text-emerald-400"></i>
+            <span>Détection IA</span>
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-xs font-bold text-slate-300 block mb-2">Catégorie de plastique</label>
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div class="p-2.5 rounded-xl bg-slate-800 border border-emerald-500 text-white flex items-center space-x-2 font-medium cursor-pointer">
+            <span>🧴</span>
+            <span>Bouteilles PET</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center space-x-2 font-medium cursor-pointer">
+            <span>💧</span>
+            <span>Sachets d'eau</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center space-x-2 font-medium cursor-pointer">
+            <span>🛢️</span>
+            <span>Bidons / Flacons</span>
+          </div>
+          <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 flex items-center space-x-2 font-medium cursor-pointer">
+            <span>🛍️</span>
+            <span>Emballages divers</span>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-xs font-bold text-slate-300 block mb-2">Volume approximatif</label>
+        <div class="grid grid-cols-3 gap-2 text-center text-[11px]">
+          <button class="py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold">Petit sac</button>
+          <button class="py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">Moyen tas</button>
+          <button class="py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300">Dépôt sauvage</button>
+        </div>
+      </div>
+
+      <button class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3.5 rounded-2xl shadow-lg transition-transform active:scale-95 flex items-center justify-center space-x-2 cursor-pointer mt-2" onclick="submitDepositReport()">
+        <i class="fa-solid fa-paper-plane"></i>
+        <span>Envoyer le signalement</span>
+      </button>
+    </div>
+
+    <!-- ==============================================
+         4. BOUTIQUE / CATALOGUE (screen-market)
+         ============================================== -->
+    <div id="screen-market" class="screen-view flex-col w-full min-h-screen p-4 space-y-3 pb-28 pt-2 select-none">
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl px-3 py-2 flex items-center space-x-2">
+        <i class="fa-solid fa-magnifying-glass text-slate-400 text-xs"></i>
+        <input class="bg-transparent text-xs text-white placeholder-slate-400 focus:outline-none w-full" placeholder="Rechercher matière ou produit..." type="text" />
+      </div>
+      <div class="flex space-x-2 overflow-x-auto no-scrollbar py-1 text-xs">
+        <button class="px-3 py-1 rounded-full bg-emerald-500 text-slate-950 font-bold shrink-0">Tous</button>
+        <button class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 font-medium shrink-0">Plastique PET</button>
+        <button class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 font-medium shrink-0">Bouchons</button>
+        <button class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 font-medium shrink-0">Verre</button>
+        <button class="px-3 py-1 rounded-full bg-slate-900 border border-slate-800 text-slate-300 font-medium shrink-0">Métal</button>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-emerald-500/50 hover:bg-slate-800/70 transition-all active:scale-[0.98] group flex flex-col justify-between" onclick="navigateTo('screen-waste-detail')">
+          <div>
+            <div class="relative rounded-xl overflow-hidden mb-2 h-24 bg-slate-950">
+              <img alt="Plastique PET" class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/AEtjO1XTUnYLPnCBUySKHv9D1T1A5jYvKjml6L6OJuJwLWgndrEQ9ZVIzKSA9YHmyy0UtOFpEIML2tMmp2Mp0G9o8qhbAu1hA4DOYK1ZTf-FdT_CX7K-34AR-UpoUWUWhIjo9eUthY9ssNvelqq5sborJtuIh4yc1VDlFZ51FyoiVlOTFBXwJQkweSVOYriLT5FcjBMmpC2IDNGXqtLcIX-DI2s1J-b-3HA1U2H9iFBeegangAlaEHUFuZsoLHE" />
+              <span class="absolute top-1 right-1 bg-black/60 text-yellow-400 text-[9px] font-bold px-1.5 py-0.5 rounded">★ 4.5</span>
+            </div>
+            <div class="text-xs font-bold text-white line-clamp-1">Bouteilles PET Éco Pavé</div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-800/80">
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="text-slate-400">10.0 kg</span>
+              <span class="text-emerald-400 font-bold">1500 FCFA</span>
+            </div>
+            <button onclick="event.stopPropagation(); triggerToast('Lot de 10kg PET réservé !')" class="w-full mt-2 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-slate-200 text-[10px] font-semibold py-1 rounded-lg transition-colors flex items-center justify-center space-x-1">
+              <i class="fa-solid fa-cart-shopping text-[9px]"></i>
+              <span>Acheter</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-emerald-500/50 hover:bg-slate-800/70 transition-all active:scale-[0.98] group flex flex-col justify-between" onclick="navigateTo('screen-product-detail')">
+          <div>
+            <div class="relative rounded-xl overflow-hidden mb-2 h-24 bg-slate-950">
+              <img alt="Bocal Bread Fitt" class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/AEtjO1W99OiXWGaE6RIGXi11dX7BX7FFAL-JscO6K80nga1lahTR6lLdJ1iKL7biCCLwY7-bGTQLGx3M1IG6HoFxBPqBi9s0WvqjXwRm5KJWPUfAm3jt4WInGieu_J6vroQNOjbcW7F8Dr7Ovf-r6MnJIC7gwAjGa1PNlep-CuqRFJtE73S11IBxFnp6r04xRnNHYN-SSaL5rGVhY909Z9ME_OABpHv-T7Bx5zTzYRXN_wcx-nYcKpSAyUFFCTY" />
+              <span class="absolute top-1 right-1 bg-black/60 text-yellow-400 text-[9px] font-bold px-1.5 py-0.5 rounded">★ 4.8</span>
+            </div>
+            <div class="text-xs font-bold text-white line-clamp-1">Bocal Bread Fitt</div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-800/80">
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="text-slate-400">Grade 1</span>
+              <span class="text-emerald-400 font-bold">+15 pts</span>
+            </div>
+            <button onclick="event.stopPropagation(); triggerToast('Bocal Bread Fitt échangé contre 15 points !')" class="w-full mt-2 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-slate-200 text-[10px] font-semibold py-1 rounded-lg transition-colors flex items-center justify-center space-x-1">
+              <i class="fa-solid fa-gift text-[9px]"></i>
+              <span>Échanger</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-emerald-500/50 hover:bg-slate-800/70 transition-all active:scale-[0.98] group flex flex-col justify-between" onclick="navigateTo('screen-waste-detail')">
+          <div>
+            <div class="relative rounded-xl overflow-hidden mb-2 h-24 bg-slate-950">
+              <img alt="Balle Compactée" class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/AEtjO1V2-AaqznVax5zKkaltd9psuoCNMIN7l675A-sIp9fz9MPTy4wmD_pVeU8QwEXDjc-lRuwt8g_4hVw3_cvNcIou1fVVjcSSrVtH_8caxYtG7BbrddS0AokqWRYsNjfqwgk1n1b131xJiqLxlF9Y-QWnFqR3eK_n0Q7LZWzxXK6ruB_LDLtNdVhKHBargzET9lNjYH_uZ7OSz6ONPRFlKeQiSwU0R3MmlKuS65p4zpSDakeHH6rKxgf-Hz0" />
+              <span class="absolute top-1 right-1 bg-black/60 text-yellow-400 text-[9px] font-bold px-1.5 py-0.5 rounded">★ 4.1</span>
+            </div>
+            <div class="text-xs font-bold text-white line-clamp-1">Balle Compactée Triée</div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-800/80">
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="text-slate-400">25.0 kg</span>
+              <span class="text-emerald-400 font-bold">3500 FCFA</span>
+            </div>
+            <button onclick="event.stopPropagation(); triggerToast('Commande de balle compactée confirmée !')" class="w-full mt-2 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-slate-200 text-[10px] font-semibold py-1 rounded-lg transition-colors flex items-center justify-center space-x-1">
+              <i class="fa-solid fa-cart-shopping text-[9px]"></i>
+              <span>Acheter</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-2.5 cursor-pointer hover:border-emerald-500/50 hover:bg-slate-800/70 transition-all active:scale-[0.98] group flex flex-col justify-between" onclick="navigateTo('screen-waste-detail')">
+          <div>
+            <div class="relative rounded-xl overflow-hidden mb-2 h-24 bg-slate-950">
+              <img alt="Bouchons" class="w-full h-full object-cover group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/AEtjO1VVtwfIMU7hSK4E6vB7JLuxLqTD6XVvqdh_yUnzmfxVDVJz93c0MIcfeWPoe3tbp4Emuun0wATDULlKuJGiF-6Uc9nQusyPtOIzLP4_i7TVdcPGjQm6IsAQtEeidEE7XNf93TLO_shP6eSRJs2CeDvTAsNfl91-1IW1mMGnOCMv_jkI7wIARe0QPTKkVzOGKotXkn2CREQ0LcAPKgUjCmlbv6-Q_q5eYHA9MTlm9LLIjjLgZk-HQ_IG3Q" />
+              <span class="absolute top-1 right-1 bg-black/60 text-yellow-400 text-[9px] font-bold px-1.5 py-0.5 rounded">★ 4.9</span>
+            </div>
+            <div class="text-xs font-bold text-white line-clamp-1">Bouchons Polyéthylène HD</div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-slate-800/80">
+            <div class="flex justify-between items-center text-[10px]">
+              <span class="text-slate-400">3.5 kg</span>
+              <span class="text-emerald-400 font-bold">+40 pts</span>
+            </div>
+            <button onclick="event.stopPropagation(); triggerToast('Lot de bouchons échangé contre 40 points !')" class="w-full mt-2 bg-slate-800 hover:bg-emerald-500 hover:text-slate-950 text-slate-200 text-[10px] font-semibold py-1 rounded-lg transition-colors flex items-center justify-center space-x-1">
+              <i class="fa-solid fa-gift text-[9px]"></i>
+              <span>Échanger</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         5. DÉTAIL DÉCHET ÉCO PAVÉ (screen-waste-detail)
+         ============================================== -->
+    <div id="screen-waste-detail" class="screen-view flex-col w-full min-h-screen p-4 space-y-4 pb-28 pt-2 select-none">
+      <div class="flex items-center justify-between pt-1">
+        <button class="w-9 h-9 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer" onclick="navigateTo('screen-home')">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <h2 class="text-base font-bold text-white">Bouteille en Plastique</h2>
+        <button class="w-9 h-9 rounded-full bg-emerald-500/20 text-emerald-400 flex items-center justify-center cursor-pointer" onclick="navigateTo('screen-report')">
+          <i class="fa-solid fa-arrows-rotate text-xs"></i>
+        </button>
+      </div>
+
+      <div class="relative rounded-3xl overflow-hidden shadow-xl h-52 bg-slate-900 border border-slate-800">
+        <img alt="Bouteille Plastique" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1UgCUP_6lec3y9WIxVecQF91I5m6n75KHvI4qzwTyK-eaxIQV2YlxIALpUNL9IrZGYPulNPKcoj4gCnMaoT4U8qwkUsl9QB5xEB7WQ4D51ccfsjCTKV83cEttxVfpTBMiMqheYhVqHEgqTzcS2InvPCdn7o1B697cZiHP4jtXQp6eaDkKJX4n5j9dZy86xaDyL9oVxd-1sxq34Z6absMcu5HiWluc2T0mCWVMpNYhXFmtv-bqBPxOAgoX0" />
+        <div class="absolute bottom-3 left-3 right-3 bg-slate-900/90 backdrop-blur-md border border-slate-700/80 rounded-2xl p-3 flex justify-between items-center">
+          <div>
+            <h3 class="text-xs font-bold text-white">Bouteille PET (Code 1)</h3>
+            <p class="text-[10px] text-emerald-400 font-medium">100% Recyclable • Éco Pavé</p>
+          </div>
+          <span class="bg-emerald-500 text-slate-950 font-bold text-[10px] px-2 py-1 rounded-lg">★ 4.8</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4">
+        <div class="flex justify-between items-center mb-1.5">
+          <h4 class="text-xs font-bold text-white">Description & Transformation</h4>
+          <span class="text-[10px] bg-emerald-500/10 text-emerald-400 font-bold px-2 py-0.5 rounded-full border border-emerald-500/30">+25 Pts Éco</span>
+        </div>
+        <p class="text-[11px] text-slate-300 leading-relaxed">
+          Les bouteilles en plastique PET (polyéthylène téréphtalate) sont 100% recyclables. Chez <strong class="text-emerald-400">Éco Pavé</strong>, elles sont collectées et transformées en <strong>pavés écologiques ultra-résistants</strong> pour construire des routes et aménager les espaces urbains durables en Côte d'Ivoire.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 text-center">
+        <div class="p-2.5 rounded-2xl bg-slate-900 border border-slate-800">
+          <span class="text-emerald-400 block mb-1 text-sm"><i class="fa-solid fa-shapes"></i></span>
+          <span class="text-[10px] font-bold text-white block">Plastique PET</span>
+          <span class="text-[9px] text-slate-400">Code 1</span>
+        </div>
+        <div class="p-2.5 rounded-2xl bg-slate-900 border border-slate-800">
+          <span class="text-emerald-400 block mb-1 text-sm"><i class="fa-solid fa-leaf"></i></span>
+          <span class="text-[10px] font-bold text-white block">+25 Points</span>
+          <span class="text-[9px] text-slate-400">Par kilo</span>
+        </div>
+        <div class="p-2.5 rounded-2xl bg-slate-900 border border-slate-800">
+          <span class="text-emerald-400 block mb-1 text-sm"><i class="fa-solid fa-city"></i></span>
+          <span class="text-[10px] font-bold text-white block">Pavés Éco</span>
+          <span class="text-[9px] text-slate-400">Voirie durable</span>
+        </div>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3">
+        <div class="flex justify-between items-center mb-2">
+          <span class="text-xs font-bold text-white">Bornes de collecte à proximité</span>
+          <span class="text-[10px] text-emerald-400 cursor-pointer hover:underline" onclick="navigateTo('screen-map')">3 bornes à Abidjan</span>
+        </div>
+        <div class="relative h-20 rounded-xl overflow-hidden border border-slate-800 cursor-pointer group" onclick="navigateTo('screen-map')">
+          <img alt="Carte" class="w-full h-full object-cover opacity-75 group-hover:scale-105 transition-transform" src="https://lh3.googleusercontent.com/aida/AEtjO1VVtwfIMU7hSK4E6vB7JLuxLqTD6XVvqdh_yUnzmfxVDVJz93c0MIcfeWPoe3tbp4Emuun0wATDULlKuJGiF-6Uc9nQusyPtOIzLP4_i7TVdcPGjQm6IsAQtEeidEE7XNf93TLO_shP6eSRJs2CeDvTAsNfl91-1IW1mMGnOCMv_jkI7wIARe0QPTKkVzOGKotXkn2CREQ0LcAPKgUjCmlbv6-Q_q5eYHA9MTlm9LLIjjLgZk-HQ_IG3Q" />
+          <div class="absolute inset-0 bg-slate-950/40 flex items-center justify-center">
+            <span class="text-xs font-bold bg-slate-900/90 text-white px-3 py-1 rounded-full border border-emerald-500 shadow-md">
+              <i class="fa-solid fa-location-dot text-emerald-400 mr-1.5"></i> Borne Cocody • 450m
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <button class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-2xl text-xs flex items-center justify-center space-x-2 shadow-lg cursor-pointer" onclick="navigateTo('screen-report')">
+        <i class="fa-solid fa-camera"></i>
+        <span>Déposer ce déchet maintenant</span>
+      </button>
+    </div>
+
+    <!-- ==============================================
+         6. DÉTAIL PRODUIT BREAD FITT (screen-product-detail)
+         ============================================== -->
+    <div id="screen-product-detail" class="screen-view flex-col w-full min-h-screen p-4 space-y-4 pb-28 pt-2 select-none">
+      <div class="flex items-center justify-between pt-1">
+        <button class="w-9 h-9 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer" onclick="navigateTo('screen-market')">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <h2 class="text-base font-bold text-white">Bread Fitt</h2>
+        <button class="w-9 h-9 rounded-full bg-slate-800 text-emerald-400 flex items-center justify-center cursor-pointer" onclick="triggerToast('Produit ajouté aux favoris !')">
+          <i class="fa-regular fa-bookmark text-xs"></i>
+        </button>
+      </div>
+
+      <div class="rounded-3xl overflow-hidden shadow-xl h-56 bg-slate-900 border border-slate-800">
+        <img alt="Bread Fitt Jar" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida/AEtjO1W99OiXWGaE6RIGXi11dX7BX7FFAL-JscO6K80nga1lahTR6lLdJ1iKL7biCCLwY7-bGTQLGx3M1IG6HoFxBPqBi9s0WvqjXwRm5KJWPUfAm3jt4WInGieu_J6vroQNOjbcW7F8Dr7Ovf-r6MnJIC7gwAjGa1PNlep-CuqRFJtE73S11IBxFnp6r04xRnNHYN-SSaL5rGVhY909Z9ME_OABpHv-T7Bx5zTzYRXN_wcx-nYcKpSAyUFFCTY" />
+      </div>
+
+      <div class="flex space-x-2 text-xs">
+        <span class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-semibold">
+          <i class="fa-solid fa-rotate mr-1"></i> PETE • Plastique Grade 1
+        </span>
+        <span class="bg-slate-800 text-slate-400 px-3 py-1 rounded-full font-medium">Réf : BF-049</span>
+      </div>
+
+      <div>
+        <h3 class="text-base font-bold text-white">Bocal alimentaire Bread Fitt recyclable</h3>
+        <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+          Ce contenant est fabriqué à partir de polymères recyclables de haute pureté. Conçu pour préserver la fraîcheur des aliments tout en réduisant l'impact environnemental.
+        </p>
+      </div>
+
+      <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 flex justify-between items-center">
+        <div class="flex items-center space-x-3">
+          <div class="w-9 h-9 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-sm">
+            <i class="fa-solid fa-box-archive"></i>
+          </div>
+          <div>
+            <div class="text-xs font-bold text-white">Taux de recyclage</div>
+            <div class="text-[10px] text-slate-400">100% Recyclable • Éco-responsable</div>
+          </div>
+        </div>
+        <span class="text-emerald-400 font-extrabold text-xs bg-emerald-500/10 px-2.5 py-1 rounded-lg border border-emerald-500/30">+15 pts</span>
+      </div>
+
+      <button class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3 rounded-2xl text-xs flex items-center justify-center space-x-2 shadow-lg cursor-pointer" onclick="navigateTo('screen-map')">
+        <i class="fa-solid fa-location-dot"></i>
+        <span>Trouver un point de collecte</span>
+      </button>
+    </div>
+
+    <!-- ==============================================
+         7. SUPPORT & CHAT (screen-chat)
+         ============================================== -->
+    <div id="screen-chat" class="screen-view flex-col w-full h-[calc(100vh-5rem)] select-none">
+      <div class="bg-emerald-600 px-4 py-3 flex items-center justify-between text-white shrink-0 shadow-md">
+        <div class="flex items-center space-x-3">
+          <button class="text-white hover:text-emerald-200 cursor-pointer" onclick="navigateTo('screen-home')">
+            <i class="fa-solid fa-chevron-left text-sm"></i>
+          </button>
+          <div class="relative">
+            <img alt="Support Amanda" class="w-9 h-9 rounded-full object-cover border-2 border-white" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" />
+            <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-300 rounded-full border border-white"></span>
+          </div>
+          <div>
+            <h3 class="text-xs font-bold leading-none">AMANDA CAROL</h3>
+            <span class="text-[10px] text-emerald-100">Support Éco Pavé • En ligne</span>
+          </div>
+        </div>
+        <button class="text-sm cursor-pointer" onclick="navigateTo('screen-settings')"><i class="fa-solid fa-ellipsis-vertical"></i></button>
+      </div>
+
+      <div id="chatFeed" class="flex-1 overflow-y-auto no-scrollbar p-3 space-y-3 bg-[#0a0f1d]">
+        <div class="text-center my-1">
+          <span class="text-[10px] bg-slate-800/80 text-slate-400 px-3 py-1 rounded-full uppercase tracking-wider font-semibold">Aujourd'hui</span>
+        </div>
+        <div class="flex items-start space-x-2 max-w-[85%]">
+          <img alt="Support" class="w-7 h-7 rounded-full object-cover shrink-0 mt-1" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" />
+          <div class="bg-slate-800 text-slate-200 text-xs p-3 rounded-2xl rounded-tl-none border border-slate-700/60 shadow-sm">
+            <p>Bonjour Alex ! Bienvenue sur l'assistance Éco Pavé. Comment puis-je vous aider pour vos dépôts de plastiques ?</p>
+            <span class="text-[9px] text-slate-400 block text-right mt-1">09:32</span>
+          </div>
+        </div>
+        <div class="flex items-start justify-end space-x-2 ml-auto max-w-[85%]">
+          <div class="bg-emerald-600 text-white text-xs p-3 rounded-2xl rounded-tr-none shadow-sm">
+            <p>J'ai collecté 15 kg de bouteilles PET à Cocody. Est-ce que la borne RVM est bien ouverte ce matin ?</p>
+            <div class="flex items-center justify-end space-x-1 text-[9px] text-emerald-200 mt-1">
+              <span>09:34</span>
+              <i class="fa-solid fa-check-double text-[8px]"></i>
+            </div>
+          </div>
+        </div>
+        <div class="flex items-start space-x-2 max-w-[85%]">
+          <img alt="Support" class="w-7 h-7 rounded-full object-cover shrink-0 mt-1" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" />
+          <div class="bg-slate-800 text-slate-200 text-xs p-3 rounded-2xl rounded-tl-none border border-slate-700/60 shadow-sm">
+            <p>Oui tout à fait ! La borne de Cocody Centre est opérationnelle jusqu'à 21h00. Vos 15 kg vous rapporteront 375 points Éco Pavé ! 🌿</p>
+            <span class="text-[9px] text-slate-400 block text-right mt-1">09:35</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-2 bg-slate-900 border-t border-slate-800 flex items-center space-x-2">
+        <input id="chatInput" class="flex-1 bg-slate-800 text-xs text-white rounded-xl px-3 py-2 focus:outline-none focus:ring-1 focus:ring-emerald-500 placeholder-slate-500" placeholder="Écrivez votre message..." type="text" onkeydown="if(event.key==='Enter') sendChatMessage()" />
+        <button onclick="sendChatMessage()" class="w-8 h-8 rounded-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 flex items-center justify-center text-xs shadow-md cursor-pointer">
+          <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         8. PARAMÈTRES (screen-settings)
+         ============================================== -->
+    <div id="screen-settings" class="screen-view flex-col w-full min-h-screen p-4 space-y-4 pb-28 pt-2 bg-slate-900 select-none">
+      <div class="flex items-center justify-between pt-1">
+        <button class="w-9 h-9 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition-colors cursor-pointer" onclick="navigateTo('screen-home')">
+          <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <h2 class="text-base font-bold text-white">Paramètres</h2>
+        <div class="w-9"></div>
+      </div>
+
+      <div class="bg-slate-800/80 rounded-2xl p-3 flex items-center space-x-3 border border-slate-700/60 shadow-md">
+        <img alt="Avatar" class="w-12 h-12 rounded-full object-cover border-2 border-emerald-500" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" />
+        <div class="flex-1 min-w-0">
+          <h3 class="text-sm font-bold text-white truncate">Alex Kouassi</h3>
+          <p class="text-xs text-slate-400 truncate">alex.kouassi@ecopave.ci</p>
+          <span class="text-[10px] text-emerald-400 font-semibold block mt-0.5">Niveau Argent • 180 Pts</span>
+        </div>
+      </div>
+
+      <div class="space-y-2 text-xs">
+        <div onclick="triggerToast('Profil mis à jour')" class="bg-slate-800/60 hover:bg-slate-800 rounded-2xl p-3.5 flex items-center justify-between border border-slate-700/50 cursor-pointer">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center"><i class="fa-solid fa-user"></i></span>
+            <span class="font-medium text-slate-200">Modifier le profil</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-500 text-[10px]"></i>
+        </div>
+
+        <div onclick="navigateTo('screen-map')" class="bg-slate-800/60 hover:bg-slate-800 rounded-2xl p-3.5 flex items-center justify-between border border-slate-700/50 cursor-pointer">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center"><i class="fa-solid fa-store"></i></span>
+            <span class="font-medium text-slate-200">Ajouter un commerce / point de collecte</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-500 text-[10px]"></i>
+        </div>
+
+        <div onclick="navigateTo('screen-onboard1')" class="bg-slate-800/60 hover:bg-slate-800 rounded-2xl p-3.5 flex items-center justify-between border border-slate-700/50 cursor-pointer">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center"><i class="fa-solid fa-circle-question"></i></span>
+            <span class="font-medium text-slate-200">Foire aux questions & Onboarding</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-500 text-[10px]"></i>
+        </div>
+
+        <div onclick="navigateTo('screen-chat')" class="bg-slate-800/60 hover:bg-slate-800 rounded-2xl p-3.5 flex items-center justify-between border border-slate-700/50 cursor-pointer">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center"><i class="fa-solid fa-headset"></i></span>
+            <span class="font-medium text-slate-200">Centre d'aide & Support</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-500 text-[10px]"></i>
+        </div>
+
+        <div onclick="triggerToast('Protection des données ARTCI active')" class="bg-slate-800/60 hover:bg-slate-800 rounded-2xl p-3.5 flex items-center justify-between border border-slate-700/50 cursor-pointer">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center"><i class="fa-solid fa-lock"></i></span>
+            <span class="font-medium text-slate-200">Confidentialité & Sécurité</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-slate-500 text-[10px]"></i>
+        </div>
+
+        <div onclick="triggerToast('Session déconnectée'); navigateTo('screen-onboard1')" class="bg-rose-500/10 hover:bg-rose-500/20 rounded-2xl p-3.5 flex items-center justify-between border border-rose-500/30 cursor-pointer">
+          <div class="flex items-center space-x-3">
+            <span class="w-8 h-8 rounded-xl bg-rose-500/20 text-rose-400 flex items-center justify-center"><i class="fa-solid fa-right-from-bracket"></i></span>
+            <span class="font-bold text-rose-400">Déconnexion</span>
+          </div>
+          <i class="fa-solid fa-chevron-right text-rose-400 text-[10px]"></i>
+        </div>
+      </div>
+
+      <div class="text-center text-[10px] text-slate-500 pt-2 font-mono">
+        Éco Pavé Côte d'Ivoire • Version 2.2.0.1
+      </div>
+    </div>
+
+    <!-- ==============================================
+         9. ONBOARDING 1 (screen-onboard1)
+         ============================================== -->
+    <div id="screen-onboard1" class="screen-view flex-col w-full min-h-screen bg-slate-900 overflow-y-auto no-scrollbar p-6 justify-between pb-10 text-center select-none">
+      <div class="flex justify-end w-full pt-1">
+        <button class="text-xs font-semibold text-slate-400 hover:text-emerald-400 cursor-pointer" onclick="navigateTo('screen-home')">Passer</button>
+      </div>
+
+      <div class="flex flex-col items-center my-auto">
+        <div class="w-48 h-48 rounded-full border-2 border-dashed border-emerald-500/40 p-4 flex items-center justify-center relative mb-6 shadow-inner">
+          <div class="w-40 h-40 rounded-full bg-white flex items-center justify-center p-4 shadow-xl">
+            <img alt="Logo Éco Pavé" class="w-full object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAO2WzRsOTL6tjcMzcqzKfubcyyoccgeikeWEMdejlgOgh9kL65TeDk92OthSvyQVmFfUHPePrnV_jJ7GN7iorYN56C9li8s1GwlS17rbgE7JFBDeHWquVDT7OCrp3xhsQBTBx8qpYuPY9wu0e_azQTp9mtWp6Yq0yEFOXAvvD6raLErCFmqEg0ttSBXLiiY_0D0u2prU0Wd9J1ype0YW1DVeHqZwGpi1DktLmzda55ACcV5qosF0J0kTtn4MAW-8uAtw" />
+          </div>
+        </div>
+        <h2 class="text-2xl font-black text-white">Pourquoi <span class="text-emerald-400">recycler ?</span></h2>
+        <p class="text-xs text-slate-300 mt-3 max-w-xs leading-relaxed">
+          Le recyclage préserve les ressources naturelles, élimine la pollution plastique dans nos villes ivoiriennes et crée de véritables pavés écologiques pour nos routes.
+        </p>
+        <div class="flex space-x-2 justify-center mt-6">
+          <span class="w-6 h-1.5 bg-emerald-500 rounded-full"></span>
+          <span class="w-1.5 h-1.5 bg-slate-700 rounded-full"></span>
+        </div>
+      </div>
+
+      <button class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3.5 rounded-2xl flex items-center justify-center space-x-2 shadow-lg cursor-pointer" onclick="navigateTo('screen-onboard2')">
+        <span>Continuer</span>
+        <i class="fa-solid fa-arrow-right text-xs"></i>
+      </button>
+    </div>
+
+    <!-- ==============================================
+         10. ONBOARDING 2 (screen-onboard2)
+         ============================================== -->
+    <div id="screen-onboard2" class="screen-view flex-col w-full min-h-screen bg-slate-900 overflow-y-auto no-scrollbar p-6 justify-between pb-10 text-center select-none">
+      <div class="flex justify-end w-full pt-1">
+        <button class="text-xs font-semibold text-slate-400 hover:text-emerald-400 cursor-pointer" onclick="navigateTo('screen-home')">Passer</button>
+      </div>
+
+      <div class="flex flex-col items-center my-auto">
+        <div class="w-44 h-44 rounded-full bg-emerald-500/10 border border-emerald-500/30 flex items-center justify-center text-7xl text-emerald-400 mb-6 shadow-inner">
+          <i class="fa-solid fa-people-carry-box"></i>
+        </div>
+        <h2 class="text-2xl font-black text-white">Comment <span class="text-emerald-400">recycler ?</span></h2>
+        <p class="text-xs text-slate-300 mt-3 max-w-xs leading-relaxed">
+          Collectez, triez vos bouteilles et bouchons plastiques, déposez-les dans nos bornes automatiques Éco Pavé et accumulez des points convertibles en récompenses !
+        </p>
+        <div class="flex space-x-2 justify-center mt-6">
+          <span class="w-1.5 h-1.5 bg-slate-700 rounded-full"></span>
+          <span class="w-6 h-1.5 bg-emerald-500 rounded-full"></span>
+        </div>
+      </div>
+
+      <button class="w-full bg-emerald-500 hover:bg-emerald-600 text-slate-950 font-bold py-3.5 rounded-2xl flex items-center justify-center space-x-2 shadow-lg cursor-pointer" onclick="navigateTo('screen-home')">
+        <span>Accéder à l'application</span>
+        <i class="fa-solid fa-check text-xs"></i>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- ==============================================
+       BARRE DE NAVIGATION INFÉRIEURE PERSISTANTE (5 Onglets)
+       ============================================== -->
+  <div id="mainNavWrapper" class="fixed bottom-0 left-0 right-0 z-50 flex justify-center pointer-events-none">
+    <nav class="w-full max-w-xl h-20 bg-[#0c1322]/95 border-t border-slate-800/80 backdrop-blur-lg flex items-center justify-around px-2 pointer-events-auto shadow-2xl">
+      <!-- 1. Accueil -->
+      <button id="tab-home" onclick="navigateTo('screen-home')" class="tab-btn active flex flex-col items-center justify-center w-14 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer">
+        <i class="fa-solid fa-house text-lg mb-1"></i>
+        <span class="text-[10px]">Accueil</span>
+      </button>
+
+      <!-- 2. Carte -->
+      <button id="tab-map" onclick="navigateTo('screen-map')" class="tab-btn flex flex-col items-center justify-center w-14 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer">
+        <i class="fa-solid fa-map-location-dot text-lg mb-1"></i>
+        <span class="text-[10px]">Carte</span>
+      </button>
+
+      <!-- 3. Bouton Central Flottant BLANC avec Symbole Vert -->
+      <button onclick="navigateTo('screen-report')" aria-label="Scanner ou signaler un déchet" class="relative -top-5 flex items-center justify-center w-14 h-14 rounded-full bg-white text-emerald-600 shadow-xl border-4 border-[#0c1322] hover:scale-105 active:scale-95 transition-transform cursor-pointer">
+        <i class="fa-solid fa-recycle text-2xl"></i>
+      </button>
+
+      <!-- 4. Boutique -->
+      <button id="tab-market" onclick="navigateTo('screen-market')" class="tab-btn flex flex-col items-center justify-center w-14 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer">
+        <i class="fa-solid fa-store text-lg mb-1"></i>
+        <span class="text-[10px]">Boutique</span>
+      </button>
+
+      <!-- 5. Réglages -->
+      <button id="tab-settings" onclick="navigateTo('screen-settings')" class="tab-btn flex flex-col items-center justify-center w-14 text-slate-400 hover:text-emerald-400 transition-colors cursor-pointer">
+        <i class="fa-solid fa-gear text-lg mb-1"></i>
+        <span class="text-[10px]">Réglages</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- SCRIPT LOGIQUE INTERACTIVE -->
+  <script>
+    let currentPoints = 180;
+    let currentKg = 34.5;
+
+    function triggerToast(text) {
+      const toast = document.getElementById('toast');
+      const toastText = document.getElementById('toastText');
+      if (toast && toastText) {
+        toastText.textContent = text;
+        toast.classList.remove('hidden');
+        toast.classList.add('flex');
+        setTimeout(() => {
+          toast.classList.add('hidden');
+          toast.classList.remove('flex');
+        }, 3200);
+      }
+    }
+
+    function navigateTo(screenId) {
+      document.querySelectorAll('.screen-view').forEach(view => {
+        view.classList.remove('active');
+      });
+      const target = document.getElementById(screenId);
+      if (target) {
+        target.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'instant' });
+      }
+
+      // Sync active tab
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      if (screenId === 'screen-home') document.getElementById('tab-home')?.classList.add('active');
+      if (screenId === 'screen-map') document.getElementById('tab-map')?.classList.add('active');
+      if (screenId === 'screen-market' || screenId === 'screen-waste-detail' || screenId === 'screen-product-detail') {
+        document.getElementById('tab-market')?.classList.add('active');
+      }
+      if (screenId === 'screen-settings') document.getElementById('tab-settings')?.classList.add('active');
+
+      // Hide navbar on onboarding
+      const nav = document.getElementById('mainNavWrapper');
+      if (nav) {
+        if (screenId === 'screen-onboard1' || screenId === 'screen-onboard2') {
+          nav.style.display = 'none';
+        } else {
+          nav.style.display = 'flex';
+        }
+      }
+    }
+
+    function selectBorne(name, dist, walk) {
+      const el = document.getElementById('sheetBorneName');
+      if (el) el.textContent = 'Borne RVM - ' + name;
+      triggerToast('Borne sélectionnée : ' + name + ' (' + dist + ')');
+    }
+
+    function simulateUpload() {
+      const title = document.getElementById('photoBoxTitle');
+      if (title) title.textContent = '✓ Photo validée (Bouteilles PET détectées)';
+      triggerToast('Analyse IA : Plastique PET certifié');
+    }
+
+    function submitDepositReport() {
+      currentPoints += 50;
+      currentKg += 2.5;
+      const ptsElem = document.getElementById('statPoints');
+      const kgElem = document.getElementById('statKg');
+      if (ptsElem) ptsElem.textContent = currentPoints;
+      if (kgElem) kgElem.textContent = currentKg.toFixed(1);
+      triggerToast('🎉 Signalement envoyé avec succès ! +50 points crédités.');
+      navigateTo('screen-home');
+    }
+
+    function sendChatMessage() {
+      const input = document.getElementById('chatInput');
+      const feed = document.getElementById('chatFeed');
+      if (!input || !feed || !input.value.trim()) return;
+      const text = input.value.trim();
+      input.value = '';
+
+      const userRow = document.createElement('div');
+      userRow.className = 'flex items-start justify-end space-x-2 ml-auto max-w-[85%]';
+      userRow.innerHTML = `
+        <div class="bg-emerald-600 text-white text-xs p-3 rounded-2xl rounded-tr-none shadow-sm">
+          <p>${text}</p>
+          <div class="flex items-center justify-end space-x-1 text-[9px] text-emerald-200 mt-1">
+            <span>En ligne</span>
+            <i class="fa-solid fa-check-double text-[8px]"></i>
+          </div>
+        </div>
+      `;
+      feed.appendChild(userRow);
+      feed.scrollTop = feed.scrollHeight;
+
+      setTimeout(() => {
+        const botRow = document.createElement('div');
+        botRow.className = 'flex items-start space-x-2 max-w-[85%]';
+        botRow.innerHTML = `
+          <img alt="Support" class="w-7 h-7 rounded-full object-cover shrink-0 mt-1" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" />
+          <div class="bg-slate-800 text-slate-200 text-xs p-3 rounded-2xl rounded-tl-none border border-slate-700/60 shadow-sm">
+            <p>Merci pour votre message ! La borne Cocody Centre est ouverte pour recevoir vos dépôts et vous attribuer vos points Éco Pavé. 🌿</p>
+            <span class="text-[9px] text-slate-400 block text-right mt-1">À l'instant</span>
+          </div>
+        `;
+        feed.appendChild(botRow);
+        feed.scrollTop = feed.scrollHeight;
+      }, 1000);
+    }
+  </script>
+</body>
+</html>

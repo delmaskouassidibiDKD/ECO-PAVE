@@ -1,0 +1,6 @@
+{
+  "name": "Éco Pavé",
+  "description": "Application mobile de collecte, recyclage et valorisation des déchets plastiques en pavés écologiques en Côte d'Ivoire.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
