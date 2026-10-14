@@ -58,9 +58,10 @@ export default function App() {
   const isOnboarding = currentScreen === 'screen-onboard1' || currentScreen === 'screen-onboard2';
 
   // Correspondance onglet actif du bas
-  const isTabActive = (tab: 'home' | 'map' | 'market' | 'settings') => {
+  const isTabActive = (tab: 'home' | 'map' | 'report' | 'market' | 'settings') => {
     if (tab === 'home' && currentScreen === 'screen-home') return true;
     if (tab === 'map' && currentScreen === 'screen-map') return true;
+    if (tab === 'report' && currentScreen === 'screen-report') return true;
     if (
       tab === 'market' &&
       (currentScreen === 'screen-market' ||
@@ -174,13 +175,28 @@ export default function App() {
               <span className="text-[10px]">Carte</span>
             </button>
 
-            {/* 3. Bouton Central Flottant BLANC avec Symbole Vert (Signaler / Déposer) */}
+            {/* 3. Bouton Central Flottant BLANC avec Symbole Vert (Signaler) */}
             <button
               onClick={() => setCurrentScreen('screen-report')}
               aria-label="Scanner ou signaler un déchet"
-              className="relative -top-5 flex items-center justify-center w-14 h-14 rounded-full bg-white text-emerald-600 shadow-xl border-4 border-[#0c1322] hover:scale-105 active:scale-95 transition-transform cursor-pointer"
+              className="relative -top-2 flex flex-col items-center justify-center w-14 cursor-pointer group"
             >
-              <i className="fa-solid fa-recycle text-2xl"></i>
+              <div
+                className={`flex items-center justify-center w-12 h-12 rounded-full bg-white text-emerald-600 shadow-xl border-4 border-[#0c1322] group-hover:scale-105 group-active:scale-95 transition-transform ${
+                  isTabActive('report') ? 'ring-2 ring-emerald-400' : ''
+                }`}
+              >
+                <i className="fa-solid fa-recycle text-xl"></i>
+              </div>
+              <span
+                className={`text-[10px] mt-1 transition-colors ${
+                  isTabActive('report')
+                    ? 'text-emerald-400 font-bold'
+                    : 'text-slate-400 group-hover:text-emerald-400'
+                }`}
+              >
+                Signaler
+              </span>
             </button>
 
             {/* 4. Marketplace / Boutique */}

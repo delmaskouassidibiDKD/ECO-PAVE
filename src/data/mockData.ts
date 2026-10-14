@@ -5,7 +5,7 @@ export const INITIAL_USER: UserStats = {
   email: 'alex.kouassi@ecopave.ci',
   city: 'Abidjan',
   commune: 'Cocody',
-  avatarUrl: 'https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg',
+  avatarUrl: '/images/avatar.jpg',
   kgRecycled: 34.5,
   points: 180,
   todayPoints: 15,
@@ -14,14 +14,16 @@ export const INITIAL_USER: UserStats = {
 };
 
 export const HOTLINK_IMAGES = {
-  avatar: 'https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg',
-  borne: 'https://lh3.googleusercontent.com/aida/AEtjO1VVtwfIMU7hSK4E6vB7JLuxLqTD6XVvqdh_yUnzmfxVDVJz93c0MIcfeWPoe3tbp4Emuun0wATDULlKuJGiF-6Uc9nQusyPtOIzLP4_i7TVdcPGjQm6IsAQtEeidEE7XNf93TLO_shP6eSRJs2CeDvTAsNfl91-1IW1mMGnOCMv_jkI7wIARe0QPTKkVzOGKotXkn2CREQ0LcAPKgUjCmlbv6-Q_q5eYHA9MTlm9LLIjjLgZk-HQ_IG3Q',
-  petBottles: 'https://lh3.googleusercontent.com/aida/AEtjO1UgCUP_6lec3y9WIxVecQF91I5m6n75KHvI4qzwTyK-eaxIQV2YlxIALpUNL9IrZGYPulNPKcoj4gCnMaoT4U8qwkUsl9QB5xEB7WQ4D51ccfsjCTKV83cEttxVfpTBMiMqheYhVqHEgqTzcS2InvPCdn7o1B697cZiHP4jtXQp6eaDkKJX4n5j9dZy86xaDyL9oVxd-1sxq34Z6absMcu5HiWluc2T0mCWVMpNYhXFmtv-bqBPxOAgoX0',
-  breadFittJar: 'https://lh3.googleusercontent.com/aida/AEtjO1W99OiXWGaE6RIGXi11dX7BX7FFAL-JscO6K80nga1lahTR6lLdJ1iKL7biCCLwY7-bGTQLGx3M1IG6HoFxBPqBi9s0WvqjXwRm5KJWPUfAm3jt4WInGieu_J6vroQNOjbcW7F8Dr7Ovf-r6MnJIC7gwAjGa1PNlep-CuqRFJtE73S11IBxFnp6r04xRnNHYN-SSaL5rGVhY909Z9ME_OABpHv-T7Bx5zTzYRXN_wcx-nYcKpSAyUFFCTY',
-  petBale: 'https://lh3.googleusercontent.com/aida/AEtjO1XTUnYLPnCBUySKHv9D1T1A5jYvKjml6L6OJuJwLWgndrEQ9ZVIzKSA9YHmyy0UtOFpEIML2tMmp2Mp0G9o8qhbAu1hA4DOYK1ZTf-FdT_CX7K-34AR-UpoUWUWhIjo9eUthY9ssNvelqq5sborJtuIh4yc1VDlFZ51FyoiVlOTFBXwJQkweSVOYriLT5FcjBMmpC2IDNGXqtLcIX-DI2s1J-b-3HA1U2H9iFBeegangAlaEHUFuZsoLHE',
-  compactedBale: 'https://lh3.googleusercontent.com/aida/AEtjO1V2-AaqznVax5zKkaltd9psuoCNMIN7l675A-sIp9fz9MPTy4wmD_pVeU8QwEXDjc-lRuwt8g_4hVw3_cvNcIou1fVVjcSSrVtH_8caxYtG7BbrddS0AokqWRYsNjfqwgk1n1b131xJiqLxlF9Y-QWnFqR3eK_n0Q7LZWzxXK6ruB_LDLtNdVhKHBargzET9lNjYH_uZ7OSz6ONPRFlKeQiSwU0R3MmlKuS65p4zpSDakeHH6rKxgf-Hz0',
-  capsBatch: 'https://lh3.googleusercontent.com/aida/AEtjO1VVtwfIMU7hSK4E6vB7JLuxLqTD6XVvqdh_yUnzmfxVDVJz93c0MIcfeWPoe3tbp4Emuun0wATDULlKuJGiF-6Uc9nQusyPtOIzLP4_i7TVdcPGjQm6IsAQtEeidEE7XNf93TLO_shP6eSRJs2CeDvTAsNfl91-1IW1mMGnOCMv_jkI7wIARe0QPTKkVzOGKotXkn2CREQ0LcAPKgUjCmlbv6-Q_q5eYHA9MTlm9LLIjjLgZk-HQ_IG3Q',
-  logoEcoPave: 'https://lh3.googleusercontent.com/aida-public/AB6AXuAO2WzRsOTL6tjcMzcqzKfubcyyoccgeikeWEMdejlgOgh9kL65TeDk92OthSvyQVmFfUHPePrnV_jJ7GN7iorYN56C9li8s1GwlS17rbgE7JFBDeHWquVDT7OCrp3xhsQBTBx8qpYuPY9wu0e_azQTp9mtWp6Yq0yEFOXAvvD6raLErCFmqEg0ttSBXLiiY_0D0u2prU0Wd9J1ype0YW1DVeHqZwGpi1DktLmzda55ACcV5qosF0J0kTtn4MAW-8uAtw',
+  avatar: '/images/avatar.jpg',
+  avatarAmanda: '/images/amanda.jpg',
+  borne: '/images/borne.jpg',
+  petBottles: '/images/pet_bottles.jpg',
+  breadFittJar: '/images/jar.jpg',
+  petBale: '/images/pet_bottles.jpg',
+  compactedBale: '/images/bale.jpg',
+  pave: '/images/pave.jpg',
+  capsBatch: '/images/caps.jpg',
+  logoEcoPave: '/images/logo.jpg',
 };
 
 export const BORNES_DATA: BorneLocation[] = [
@@ -134,6 +136,18 @@ export const MARKET_ITEMS: MarketItem[] = [
     imageUrl: HOTLINK_IMAGES.capsBatch,
     targetScreen: 'screen-waste-detail',
     description: 'Bouchons en PEHD haute densité, idéaux pour le renforcement thermique des pavés Éco Pavé.',
+  },
+  {
+    id: 'item-5',
+    name: 'Pavé Écologique Hexagonal',
+    subtitle: '100% Plastique Recyclé & Sable',
+    category: 'pet',
+    priceFcfa: 2500,
+    points: 50,
+    rating: 5.0,
+    imageUrl: HOTLINK_IMAGES.pave,
+    targetScreen: 'screen-product-detail',
+    description: 'Pavé autobloquant ultra-résistant pour allées et chaussées, fabriqué à Abidjan à base de déchets plastiques valorisés.',
   },
 ];
 

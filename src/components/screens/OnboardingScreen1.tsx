@@ -22,10 +22,10 @@ export const OnboardingScreen1: React.FC<OnboardingScreen1Props> = ({ onNavigate
       {/* Illustration Éco Pavé */}
       <div className="flex flex-col items-center my-auto">
         <div className="w-48 h-48 rounded-full border-2 border-dashed border-emerald-500/40 p-4 flex items-center justify-center relative mb-6 shadow-inner">
-          <div className="w-40 h-40 rounded-full bg-white flex items-center justify-center p-4 shadow-xl">
+          <div className="w-40 h-40 rounded-3xl bg-slate-950 flex items-center justify-center overflow-hidden shadow-2xl border border-emerald-500/30">
             <img
               alt="Logo Éco Pavé"
-              className="w-full object-contain"
+              className="w-full h-full object-cover"
               src={HOTLINK_IMAGES.logoEcoPave}
             />
           </div>

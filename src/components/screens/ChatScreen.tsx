@@ -76,7 +76,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({ onNavigate }) => {
             <img
               alt="Support Amanda"
               className="w-9 h-9 rounded-full object-cover border-2 border-white"
-              src={HOTLINK_IMAGES.avatar}
+              src={HOTLINK_IMAGES.avatarAmanda || HOTLINK_IMAGES.avatar}
             />
             <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-300 rounded-full border border-white"></span>
           </div>
@@ -131,7 +131,7 @@ export const ChatScreen: React.FC<ChatScreenProps> = ({ onNavigate }) => {
               <img
                 alt="Avatar Support"
                 className="w-7 h-7 rounded-full object-cover shrink-0 mt-1 border border-emerald-500/50"
-                src={HOTLINK_IMAGES.avatar}
+                src={HOTLINK_IMAGES.avatarAmanda || HOTLINK_IMAGES.avatar}
               />
               <div className="bg-slate-800 text-slate-200 text-xs p-3 rounded-2xl rounded-tl-none border border-slate-700/60 shadow-sm">
                 <p className="leading-relaxed">{msg.text}</p>
